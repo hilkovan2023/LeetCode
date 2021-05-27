@@ -9,27 +9,27 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 		if len(nums2)%2 == 1 {
 			return float64(nums2[len(nums2)/2])
 		} else {
-			return float64((nums2[len(nums2)/2] + nums2[len(nums2)/2-1]))/2
+			return float64((nums2[len(nums2)/2] + nums2[len(nums2)/2-1])) / 2
 		}
-	} else if nums2 == nil{
+	} else if nums2 == nil {
 		if len(nums1)%2 == 1 {
 			return float64(nums1[len(nums1)/2])
 		} else {
-			return float64((nums1[len(nums1)/2] + nums1[len(nums1)/2-1]))/2
+			return float64((nums1[len(nums1)/2] + nums1[len(nums1)/2-1])) / 2
 		}
 	} else {
-		nums3 := sort(nums1, nums2)
+		nums3 := sortt(nums1, nums2)
 		fmt.Println(nums3)
 		if len(nums3)%2 == 1 {
 			return float64(nums3[len(nums3)/2])
 		} else {
-			return float64((nums3[len(nums3)/2] + nums3[len(nums3)/2-1]))/2
+			return float64((nums3[len(nums3)/2] + nums3[len(nums3)/2-1])) / 2
 		}
 	}
 }
 
 //两个正序数组拼接成一个正序数组
-func sort(nums1 []int, nums2 []int) []int {
+func sortt(nums1 []int, nums2 []int) []int {
 	nums3 := make([]int, len(nums1)+len(nums2))
 	index1 := 0
 	index2 := 0
@@ -60,6 +60,6 @@ func sort(nums1 []int, nums2 []int) []int {
 
 func main() {
 	nums1 := []int{}
-	nums2 := []int{3,4,5,8}
+	nums2 := []int{3, 4, 5, 8}
 	fmt.Println(findMedianSortedArrays(nums1, nums2))
 }
