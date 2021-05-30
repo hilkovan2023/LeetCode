@@ -1,30 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"runtime"
+	"time"
+)
 
-
-func addOne(s []int) {
-	s[0] = 4  // 可以改变原切片值
-	s = append(s, 1)  // 扩容后分配了新的地址，原切片将不再受影响
-	s[0] = 8
-	fmt.Println(s)
+func query() int {
+	ch := make(chan int)
+	for i := 0; i < 2; i++ {
+		go func() { ch <- i }()
+	}
+	t := <-ch
+	fmt.Println(t)
+	return t
 }
-
-type nnn struct {
-	val int
-	left *nnn
-	right *nnn
-}
-
-
 
 func main() {
-	p := new(nnn)
-	q := nnn{val:100}
-	fmt.Println(p)
-	fmt.Println(q)
-	var s1 = []int{2}   // 初始化一个切片
-	fmt.Println(s1)
-	addOne(s1)          // 调用函数添加一个切片
-	fmt.Println(s1)     // 输出一个值 [4]
+	for i := 0; i < 4; i++ {
+		query()
+		time.Sleep(1 * time.Second)
+		fmt.Printf("goroutines: %d\n", runtime.NumGoroutine())
+	}
 }
