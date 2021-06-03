@@ -48,4 +48,5 @@ func main() {
 	printlink(head.next)
 	shead := switch2node(head)
 	printlink(shead.next)
+	fmt.Println(*shead, &(shead.val), &(shead.next))
 }
