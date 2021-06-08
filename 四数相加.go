@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func fournumsum(num1 []int, num2 []int, num3 []int, num4 []int) int {
 	res := 0
