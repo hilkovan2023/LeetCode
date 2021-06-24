@@ -34,9 +34,9 @@ func main() {
 
 	go read2(int_ch)
 
-	go read3(int_ch)
+	//go read3(int_ch)
 
-	for i := 0; i >= 0; i++ {
+	for i := 0; i <= 10; i++ {
 		int_ch <- i
 		time.Sleep(1 * time.Second)
 	}

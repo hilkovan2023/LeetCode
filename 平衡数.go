@@ -11,6 +11,9 @@ type node struct {
 }
 
 func newtree(nums []int) *node {
+	if len(nums) == 0 {
+		return nil
+	}
 	nodes := []*node{}
 	for _, v := range nums {
 		nodes = append(nodes, &node{val: v})
@@ -39,6 +42,21 @@ func printTree(root *node, head string) {
 	head = head[4:]
 }
 
+func isBalanced(root *node) bool {
+	if root == nil {
+		return true
+	} else {
+		leftdepth := maxdeep(root.left)
+		rightdepth := maxdeep(root.right)
+		fmt.Println("left,right:", leftdepth, rightdepth)
+		if leftdepth-rightdepth <= 1 && leftdepth-rightdepth >= -1 {
+			return isBalanced(root.right) && isBalanced(root.left)
+		} else {
+			return false
+		}
+	}
+}
+
 func maxnum(a, b int) int {
 	if a > b {
 		return a
@@ -56,8 +74,9 @@ func maxdeep(root *node) int {
 }
 
 func main() {
-	root := newtree([]int{1, 2, 3, 4, 5, 6, 6})
+	root := newtree([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	root.right.right = nil
 	printTree(root, "")
-	res := maxdeep(root)
-	fmt.Println("树深度：", res)
+	res := isBalanced(root)
+	fmt.Println(res)
 }

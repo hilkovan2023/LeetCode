@@ -11,6 +11,9 @@ type node struct {
 }
 
 func newtree(nums []int) *node {
+	if len(nums) == 0 {
+		return nil
+	}
 	nodes := []*node{}
 	for _, v := range nums {
 		nodes = append(nodes, &node{val: v})
@@ -39,25 +42,29 @@ func printTree(root *node, head string) {
 	head = head[4:]
 }
 
-func maxnum(a, b int) int {
-	if a > b {
+func minnum(a, b int) int {
+	if a < b {
 		return a
 	} else {
 		return b
 	}
 }
 
-func maxdeep(root *node) int {
+func mindeep(root *node) int {
+	min := -1
 	if root == nil {
-		return 0
+		min = 0
+	} else if root.left == nil || root.right == nil {
+		min = 1
+	} else {
+		min = 1 + minnum(mindeep(root.left), mindeep(root.right))
 	}
-	max := 1 + maxnum(maxdeep(root.left), maxdeep(root.right))
-	return max
+	return min
 }
 
 func main() {
-	root := newtree([]int{1, 2, 3, 4, 5, 6, 6})
+	root := newtree([]int{})
 	printTree(root, "")
-	res := maxdeep(root)
-	fmt.Println("树深度：", res)
+	res := mindeep(root)
+	fmt.Println("最小高度：", res)
 }

@@ -10,7 +10,7 @@ func main() {
 	ch2 := make(chan int)
 	// 开启goroutine将0~100的数发送到ch1中
 	go func() {
-		for i := 0; i < 100; i++ {
+		for i := 0; i < 10; i++ {
 			time.Sleep(time.Second)
 			ch1 <- i
 			fmt.Println("ch1 <- :", i)
@@ -32,5 +32,6 @@ func main() {
 	// 在主goroutine中从ch2中接收值打印
 	for i := range ch2 { // 通道关闭后会退出for range循环
 		fmt.Println("range ch2", i)
+
 	}
 }
