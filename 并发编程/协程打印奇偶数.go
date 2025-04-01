@@ -3,37 +3,56 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
-func one(in chan int) {
-	for i := range in {
-		fmt.Println(i + 1)
-		time.Sleep(2000 * time.Millisecond)
-	}
-	fmt.Println("one ok!")
-	defer wg.Done()
+type Printer struct {
+	wg  *sync.WaitGroup
+	ch1 chan int
+	ch2 chan int
 }
 
-func two(out chan int) {
-	for i := 0; i < 10; {
+func NewPrinter(wg *sync.WaitGroup) Printer {
+	return Printer{
+		wg:  wg,
+		ch1: make(chan int),
+		ch2: make(chan int),
+	}
+}
+
+func (p Printer) Start(start int) {
+	p.ch1 <- start
+}
+
+func (p Printer) One() {
+	for i := range p.ch1 {
 		fmt.Println(i)
-		out <- i
-		time.Sleep(500 * time.Millisecond)
-		i += 2
+		p.ch2 <- i + 1
 	}
-	close(out)
-	fmt.Println(10)
-	fmt.Println("two ok!")
-	defer wg.Done()
+	close(p.ch2)
+	fmt.Println("one ok!")
+	defer p.wg.Done()
 }
 
-var wg = sync.WaitGroup{}
+func (p Printer) Two() {
+	for i := range p.ch2 {
+		if i > 16 {
+			close(p.ch1)
+			return
+		}
+		fmt.Println(i)
+		p.ch1 <- i + 1
+	}
+	fmt.Println("two ok!")
+	defer p.wg.Done()
+}
 
 func main() {
-	ch1 := make(chan int)
+	var wg sync.WaitGroup
+	printer := NewPrinter(&wg)
 	wg.Add(2)
-	go one(ch1)
-	go two(ch1)
+	go printer.One()
+	go printer.Two()
+
+	printer.Start(3)
 	wg.Wait()
 }
